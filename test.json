@@ -1,0 +1,10 @@
+{
+    "host": "localhost",
+    "user": "root",
+    "database": "test",
+    "output": "F:/data-output/out_entities/test",
+    "dbModule": "app",
+    "dbVariable": "db",
+    "tableNamePrefix": ["t_", "sys_"],
+    "toCamelCase": true
+}
