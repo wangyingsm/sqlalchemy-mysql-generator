@@ -11,10 +11,10 @@ def check_and_connect(args):
     if 'database' not in args or not args['database']:
         raise AttributeError()
     if 'password' not in args or not args['password']:
-        conn = pm.connect(host=args['host'], user=args['user'], database=args['database'])
+        conn = pm.connect(host=args['host'], user=args['user'], database=args['database'], charset='utf8')
     else:
         conn = pm.connect(host=args['host'], user=args['user'], 
-        password=args['password'], database=args['database'])
+        password=args['password'], database=args['database'], charset='utf8')
     return conn
 
 def get_all_tables(conn):
@@ -70,6 +70,9 @@ def parse_columns(columns, camel_case):
             fields.append(fieldstr)
             continue
         if type in ('char', 'varchar'):
+            if defaultstr:
+                dps = defaultstr.split('=')
+                defaultstr = dps[0] + "='" + dps[1] + "'"
             fieldstr = '%s = db.Column("%s", db.String(%s)%s%s%s)' %(fieldname, col[0], size, prikeystr, nullstr, defaultstr)
             fields.append(fieldstr)
             continue
@@ -86,6 +89,9 @@ def parse_columns(columns, camel_case):
             fields.append(fieldstr)
             continue
         if type in ('tinytext', 'text', 'mediumtext', 'longtext'):
+            if defaultstr:
+                dps = defaultstr.split('=')
+                defaultstr = dps[0] + "='" + dps[1] + "'"
             fieldstr = '%s = db.Column("%s", db.Text%s%s%s)' %(fieldname, col[0], prikeystr, nullstr, defaultstr)
             fields.append(fieldstr)
             continue
